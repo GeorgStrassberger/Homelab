@@ -6,7 +6,7 @@ Dieses Repository dient dazu, die gesamte Infrastruktur nachvollziehbar zu dokum
 
 ---
 
-## 📚 Inhaltsverzeichnis
+## Inhaltsverzeichnis
 
 - [Überblick](#überblick)
 - [Architektur](#architektur)
@@ -15,10 +15,6 @@ Dieses Repository dient dazu, die gesamte Infrastruktur nachvollziehbar zu dokum
 - [Reverse Proxy Struktur](#reverse-proxy-struktur)
 - [Host-Systeme](#host-systeme)
 - [Services](#services)
-- [Repository-Struktur](#repository-struktur)
-- [Voraussetzungen](#voraussetzungen)
-- [Deployment-Philosophie](#deployment-philosophie)
-- [Lizenz](#lizenz)
 
 ---
 
@@ -211,9 +207,10 @@ sequenceDiagram
 
 ### Anwendungen
 
-- Docker-Verwaltung
-- Mail-Testserver
-- Finanzverwaltung
-- Budgetplanung
+- [Dockhand](./dockhand/README.md)
+- [Monitoring](./monitoring/README.md)
+- [Mailhog-Testserver](./mailhog/README.md)
+- [Firefly 3](./firefly-iii//README.md)
+- [Actual Budget](./actual-budget//README.md)
 
 ---
