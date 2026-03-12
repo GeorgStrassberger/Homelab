@@ -1,0 +1,60 @@
+groups:
+  - name: infra-alerts
+    rules:
+      - alert: InstanceDown
+        expr: up{job=~"node|cadvisor"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Exporter nicht erreichbar"
+          description: "{{ $labels.job }} auf {{ $labels.instance }} antwortet nicht"
+
+      - alert: HostHighCPU
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CPU-Auslastung hoch"
+          description: "CPU-Auslastung auf {{ $labels.instance }} ist länger als 5 Minuten über 90%"
+
+      - alert: HostLowDisk
+        expr: (node_filesystem_avail_bytes{mountpoint="/",fstype!=""} / node_filesystem_size_bytes{mountpoint="/",fstype!=""}) * 100 < 10
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Wenig Plattenplatz"
+          description: "Freier Speicher auf {{ $labels.instance }} ist unter 10%"
+
+      - alert: HostHighMemory
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "RAM-Auslastung hoch"
+          description: "RAM-Auslastung auf {{ $labels.instance }} ist länger als 5 Minuten über 90%"
+          
+# cadvisor-Regeln funtkionieren nur wenn Container limits gesetzt sind
+#      - alert: ContainerHighMemory
+#        expr: (container_memory_working_set_bytes{name!=""} / container_spec_memory_limit_bytes{name!=""}) * 100 > 90
+#        for: 10m
+#        labels:
+#          severity: warning
+#        annotations:
+#          summary: "Container nutzt viel RAM"
+#          description: "Container {{ $labels.name }} nutzt mehr als 90% seines Limits"
+
+# TEST ALERT
+#  - name: test-alerts
+#    rules:
+#      - alert: TestAlert
+#        expr: vector(1)
+#        for: 1m
+#        labels:
+#          severity: warning
+#        annotations:
+#          summary: "Test Alert"
+#          description: "Nur zum Testen von Prometheus -> Alertmanager -> Nagstamon"
