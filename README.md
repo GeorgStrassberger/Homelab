@@ -118,7 +118,7 @@ Verwaltet containerisierte Dienste:
 | ----------------- | ------------------ |
 | dockhand.home.lab | Dockhand Container |
 | mailhog.home.lab  | MailHog Container  |
-| firefly3.home.lab | Firefly III        |
+| firefly.home.lab  | Firefly III        |
 | actual.home.lab   | Actual Budget      |
 
 ---
@@ -209,6 +209,7 @@ sequenceDiagram
 
 - [Dockhand](./dockhand/README.md)
 - [Monitoring](./monitoring/README.md)
+- [Traefik Proxy](./traefik/README.md)
 - [Mailhog-Testserver](./mailhog/README.md)
 - [Firefly 3](./firefly-iii//README.md)
 - [Actual Budget](./actual-budget//README.md)

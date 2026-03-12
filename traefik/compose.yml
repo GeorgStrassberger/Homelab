@@ -1,0 +1,46 @@
+services:
+  traefik:
+    image: traefik:v3.6
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    environment:
+      - LEGO_CA_CERTIFICATES=/certs/root_ca.crt
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik.rule=Host(`${TRAEFIK_DASHBOARD_HOST}`)
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.tls=true
+      - traefik.http.routers.traefik.tls.certresolver=stepca
+      - traefik.http.services.traefik.loadbalancer.server.port=8080
+      - traefik.docker.network=proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /srv/traefik/traefik.yml:/traefik.yml:ro
+      - /srv/traefik/acme:/acme
+      - /srv/traefik/certs:/certs:ro
+    command:
+      - --configFile=/traefik.yml
+    networks:
+      - proxy
+
+# WHOAMI EXAMPLE 
+  whoami:
+    image: traefik/whoami
+    container_name: whoami
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.whoami.rule=Host(`${WHOAMI_HOST}`)
+      - traefik.http.routers.whoami.entrypoints=websecure
+      - traefik.http.routers.whoami.tls=true
+      - traefik.http.routers.whoami.tls.certresolver=stepca
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
